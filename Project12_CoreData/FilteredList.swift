@@ -19,7 +19,12 @@ struct FilteredList<T: NSManagedObject, Content: View>: View {
         }
     }
     init(filterKey: String, filterValue: String, sortDescriptor: [NSSortDescriptor], predicate: String, @ViewBuilder content: @escaping (T) -> Content) {
-        _fetchRequest = FetchRequest<T>(sortDescriptors: sortDescriptor, predicate: NSPredicate(format: "%K \(predicate) %@", filterKey, filterValue))
+        if predicate != "All" {
+            _fetchRequest = FetchRequest<T>(sortDescriptors: sortDescriptor, predicate: NSPredicate(format: "%K \(predicate) %@", filterKey, filterValue))
+        } else {
+            _fetchRequest = FetchRequest<T>(sortDescriptors: sortDescriptor)
+
+        }
         self.content = content
     }
 }
